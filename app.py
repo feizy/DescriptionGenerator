@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import requests
 import openai
 import os
@@ -13,8 +13,26 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+@app.route("/code", methods=["POST","GET"])
+def generate_code():
+    if request.method == "POST":
+        model_engine = "code-davinci-002"
+        prompt = request.form['问题']
+        completions = openai.Completion.create(
+            engine=model_engine,
+            prompt=prompt,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.3,
+        )
+        answer = completions.choices[0].text
+        return render_template("code.html", answer=answer)
+    return render_template("code.html")
+
+
 @app.route("/generate", methods=["POST","GET"])
-def generate():
+def generate_description():
     if request.method == "POST":
         model_engine = "text-davinci-003"
         product_category = request.form["product_category"]
@@ -32,8 +50,17 @@ def generate():
             temperature=0.5,
         )
         product_description = completions.choices[0].text
-        return render_template("index.html", product_description=product_description)
-    return render_template("index.html")
+        return render_template("description.html", product_description=product_description)
+    return render_template("description.html")
+
+@app.route('/goto_code')
+def goto_code():
+    return redirect(url_for('generate_code'))
+
+@app.route('/goto_description')
+def goto_description():
+    return redirect(url_for('generate_description'))
+
 def generate_prompt(product_category, brand, color, material, additional_info):
     return """生成一个商品描述，语言要生动准确;
     第一段描述基本属性，第二段描述一下使用场景;
@@ -48,4 +75,4 @@ def generate_prompt(product_category, brand, color, material, additional_info):
         product_category, brand, color, material, additional_info
     )
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)

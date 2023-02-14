@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>生成回答</title>
+  </head>
+  <body>
+    <h1>请输入您的问题：</h1>
+    <input type="text" id="question" />
+    <input type="submit" value="Generate answer">生成回答</input>
+    <br /><br />
+    {% if answer %}
+            <h2>回答:</h2>
+            <p>{{ answer }}</p>
+        {% endif %}
+  </body>
+</html>
