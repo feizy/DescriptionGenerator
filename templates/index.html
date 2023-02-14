@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Product Description Generator</title>
+    </head>
+    <body>
+        <h1>Product Description Generator</h1>
+        <form action="/generate" method="post">
+            <p>Product Category: <input type="text" name="product_category"></p>
+            <p>Brand: <input type="text" name="brand"></p>
+            <p>Color: <input type="text" name="color"></p>
+            <p>Material: <input type="text" name="material"></p>
+            <p>Additional Info: <input type="text" name="additional_info"></p>
+            <input type="submit" value="Generate Description">
+        </form>
+        {% if product_description %}
+            <h2>Product Description:</h2>
+            <p>{{ product_description }}</p>
+        {% endif %}
+    </body>
+</html>
