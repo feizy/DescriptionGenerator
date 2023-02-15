@@ -17,7 +17,7 @@ def index():
 def generate_code():
     if request.method == "POST":
         model_engine = "code-davinci-002"
-        prompt = request.form['问题']
+        prompt = request.form['question']
         completions = openai.Completion.create(
             engine=model_engine,
             prompt=prompt,
